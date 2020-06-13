@@ -22,15 +22,7 @@ app.use(cookieParser());
 app.use("/api/emp", require("./routes/emp"));
 app.use("/api/doc", require("./routes/doc"));
 
-/*app.use("/api/cus", require("./routes/cus"));
-app.use("/api/items", require("./routes/shoppingItems"));
-app.use("/api/product", require("./routes/product.route"));
-app.use('/api/productcategory', require('./routes/productCategory.route'));
-app.use("/api/storemanager", require("./routes/storemanager.route"));
-app.use("/api/order", require("./routes/OrderRoute"));
-app.use("/api/wishlist", require("./routes/wishlist.route"));
-app.use("/api/rating", require("./routes/RatingsRoute"));
-app.use("/api/comments", require("./routes/comments"));*/
+
 
 
 

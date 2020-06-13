@@ -8,7 +8,7 @@ const auth = require('../middleware/auth');
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//register emps of hospitals
 router.post('/register', (req,res) =>{
 
     //To register emp
@@ -32,7 +32,7 @@ router.post('/register', (req,res) =>{
 
 
     const user = new User(req.body);
-
+    /*pw hashing*/
     bcrypt.genSalt(10, (err, salt) => {
 
         bcrypt.hash(user.empPw, saltRounds, function(error, hash) {
@@ -70,7 +70,7 @@ router.post('/register', (req,res) =>{
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
+//login
 router.post('/login', (req,res) =>{
 
     //To login emp
@@ -84,7 +84,7 @@ router.post('/login', (req,res) =>{
         if(!user){
             return res.status(400).json({msg : 'Invalid Username'})
         }
-
+        /*pw checking, hash passwords are checked here*/
         bcrypt.compare(empPw, user.empPw).then(result => {
             if(!result){
                 return res.status(400).json({

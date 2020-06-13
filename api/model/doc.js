@@ -13,6 +13,7 @@ const docSchema = mongoose.Schema({
     docName : {
         type : String
     },
+
     channelFee : {
         type : Number
     },
@@ -44,11 +45,13 @@ const docSchema = mongoose.Schema({
     }
 
 
-})
+},{
+    collection : 'doctors'
+});
 
 
 
 
 
 const Doc = mongoose.model('Doctors', docSchema);
-module.exports = {Doc};
+module.exports = Doc;

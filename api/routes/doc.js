@@ -4,15 +4,15 @@ const express = require('express');
 const router = express.Router();
 
 
-const doc = require('../model/doc');
-
+const Doc = require('../model/doc');
+const multer = require("multer");
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
+//related to multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // cb(null, 'api/uploads/');
-        cb(null, "client/public/uploads/");
+        cb(null, "client/public/uploads/"); /*save locations*/
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + file.originalname);
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-        cb(null, true);
+        cb(null, true);  /*determine image type*/
     } else {
         // rejects storing a file
         cb(null, false);
@@ -40,9 +40,9 @@ const upload = multer({
 {/*----------------------------------------------------------------------*/}
 
 
-
+//doc list will be taken without search
 router.get('/get/all/paginate', (req,res) => {
-    doc.find().then(items => {
+    Doc.find().then(items => {
 
         const page = parseInt(req.query.page) || 1;
 
@@ -62,24 +62,12 @@ router.get('/get/all/paginate', (req,res) => {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*({
-    product_name: new RegExp(req.query.sitem, 'i')
-})*/
-/*
-({
-    "$or": [
-        { name: { '$regex': query, '$options': 'i' } },
-        { ref: { '$regex': query, '$options': 'i' } }
-    ]
-})
-
-*/
 
 router.get('/get/all/paginate/search', (req,res) => {
-    doc.find({
+    Doc.find({
         "$or": [
             { docName: { '$regex': req.query.sitem, '$options': 'i' } },
-            { specialization: { '$regex': req.query.sitem, '$options': 'i' } }
+            { specialization: { '$regex': req.query.sitem, '$options': 'i' } }  /*to search on doc name and specialization */
         ]
 
           }).then(items => {
@@ -103,12 +91,12 @@ router.get('/get/all/paginate/search', (req,res) => {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//to add docs to db
 router.route("/add").post(
     upload.single("imageData"),
     (req, res, next) => {
         console.log(req.body);
-        const newDoc = new doc({
+        const newDoc = new Doc({     /*doc cons called*/
             imageName: req.body.imageName,
             // imageData: req.file.path,
             imageData: req.file.path.substr(22),
@@ -141,18 +129,13 @@ router.route("/add").post(
 
 
 
-router.route('/delete/:id').get(function(req, res){
-    doc.findByIdAndRemove({_id:req.params.id}, function(err, business){
-        if(err)res.json(err);
-        else res.json('Successfully removed');
-    });
-});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//not used bcz of pagination method
 router.route("/get").get(function (req, res) {
-    doc.find(function (err, product) {
+    Doc.find(function (err, product) {
         if (err) console.log(err);
         else {
             res.json(product);
